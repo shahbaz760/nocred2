@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Define the SNS topic ARN
+SNS_TOPIC_ARN="arn:aws:sns:us-east-2:637527414831:CodeDeploymentNotifications"
+
+# Function to send SNS email notification
+send_sns_notification() {
+    local subject=$1
+    local message=$2
+    aws sns publish --topic-arn "$SNS_TOPIC_ARN" --message "$message" --subject "$subject"
+}
+
+# Trap errors and handle failures
+trap 'send_sns_notification "Deployment Failed" "There was an error during the deployment process. Please check the logs." && exit 1' ERR
+
 # Check if Docker is already installed
 if ! command -v docker >/dev/null 2>&1; then
     # Add Docker's official GPG key
@@ -21,21 +34,18 @@ else
     echo "Docker is already installed."
 fi
 
-
-
-#Login to ecr 
+# Login to ECR
 aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
 
-
-#Pull latest docker iamge
+# Pull the latest docker image
 docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
 
-#check if there is any instance already running 
 # Check which Docker container is running on port 80
 CONTAINER_ID=$(docker ps --filter "publish=80" --format "{{.ID}}")
 
 if [ -z "$CONTAINER_ID" ]; then
     echo "No Docker container is running on port 80."
+    send_sns_notification "Deployment Failed" "No container is running on port 80."
     exit 1
 fi
 
@@ -54,6 +64,18 @@ docker rm $CONTAINER_ID
 
 echo "Docker container $CONTAINER_NAME has been stopped and removed."
 
+# Create a unique container name
+UNIQUE_ID=$(date +%s)
+CONTAINER_NAME="frontend-${UNIQUE_ID}"
 
-#Start a new container 
+# Start a new container
+echo "Starting a new container with name $CONTAINER_NAME..."
 sudo docker run -d --name $CONTAINER_NAME --restart always -p 80:80 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+
+# Clean up unused Docker resources
+echo "Cleaning up unused Docker resources..."
+sudo docker system prune -a --force
+
+# Send success notification
+send_sns_notification "Deployment Success" "Code deployed successfully. The new container $CONTAINER_NAME is now running."
+
