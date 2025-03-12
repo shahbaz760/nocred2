@@ -3,7 +3,7 @@ name: nocred
 on:
     push:
         branches:
-              - main
+            - main
 
 
 jobs:
@@ -31,9 +31,10 @@ jobs:
                 echo "My secret is: $SECRET_VALUE"
 
 
-          - name: Checkout code
-            uses: |
+          - name: image push
+            run: |
                   aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
                   docker build -t nocred .
                   docker tag nocred:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
                   docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+                  '
