@@ -48,3 +48,9 @@ jobs:
 
           - name: Create ssh key
             run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key
+
+
+          - name: Checking ssh keys
+            run: |
+              cat ~/.ssh/my-ec2-key
+              cat ~/.ssh/my-ec2-key.pub
