@@ -49,7 +49,7 @@ jobs:
           - name: Create ssh key
             run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key -C "ubuntu"
 
-          - name: Checking ssh keys
+          - name: Copy ssh key to server
             run: |
-              cat ~/.ssh/my-ec2-key
-              cat ~/.ssh/my-ec2-key.pub
+              PUBKEY=`cat ~/.ssh/my-ec2-key.pub`
+              echo $PUBKEY
