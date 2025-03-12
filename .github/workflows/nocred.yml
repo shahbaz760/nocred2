@@ -47,8 +47,7 @@ jobs:
             # run: aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo rm -rf deploy.bash"]'     --timeout-seconds 600 --region us-east-2
 
           - name: Create ssh key
-            run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key -c ubuntu
-
+            run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key -C "ubuntu"
 
           - name: Checking ssh keys
             run: |
