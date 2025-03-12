@@ -52,4 +52,4 @@ jobs:
           - name: Copy ssh key to server
             run: |
               PUBKEY=`cat ~/.ssh/my-ec2-key.pub`
-              aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["mkdir -p .ssh/ && echo $PUBKEY>.ssh/authorized_keys"]'     --timeout-seconds 600 --region us-east-2
+              aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["echo \"$PUBKEY\" | sudo tee /home/ubuntu/.ssh/authorized_key"]'     --timeout-seconds 600 --region us-east-2
