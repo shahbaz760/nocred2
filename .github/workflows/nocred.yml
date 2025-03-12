@@ -50,4 +50,4 @@ jobs:
             run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key -C "ubuntu"
 
           - name: Copy public to S3
-            run: aws s3 cp ~/.ssh/my-ec2-key.pub s3://ssm-script-1/my-ec2-key.pub
+            run: aws s3 cp deploy.bash s3://ssm-script-1/deploy.bash
