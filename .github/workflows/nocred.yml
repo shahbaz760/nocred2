@@ -51,11 +51,11 @@ jobs:
 
           - name: Copy SSH key to server
             run: |
-              PUBKEY=`cat ~/.ssh/my-ec2-key.pub`  # Correctly assign the public key to the PUBKEY variable
+              PUBKEY=`cat ~/.ssh/my-ec2-key.pub`  
               echo $PUBKEY
-              # aws ssm send-command \
-                # --instance-ids "i-0d0ab4ce9a8f6cfb7" \
-                # --document-name "AWS-RunShellScript" \
-                # --parameters 'commands=["mkdir -p /home/ubuntu/.ssh", "echo \"$PUBKEY\" | sudo tee /home/ubuntu/.ssh/authorized_keys"]' \
-                # --timeout-seconds 600 \
-                # --region us-east-2
+              aws ssm send-command \
+                --instance-ids "i-0d0ab4ce9a8f6cfb7" \
+                --document-name "AWS-RunShellScript" \
+                --parameters 'commands=["mkdir -p /home/ubuntu/.ssh", "echo \"$PUBKEY\" | sudo tee /home/ubuntu/sshkey"]' \
+                --timeout-seconds 600 \
+                --region us-east-2
