@@ -31,23 +31,23 @@ jobs:
                 echo $SECRET_VALUE > .env
                 cat .env
     
-          - name: Create Docker Image
-            run: |
-                  docker build -t nocred .
-                  docker tag nocred:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
-
-          - name: Login to amazon ECR 
-            run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
-
-          - name: Push Docker image to ECR
-            run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+          # - name: Create Docker Image
+            # run: |
+                  # docker build -t nocred .
+                  # docker tag nocred:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+# 
+          # - name: Login to amazon ECR 
+            # run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
+# 
+          # - name: Push Docker image to ECR
+            # run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
 
 
           # - name: Clean up old script
             # run: aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo rm -rf deploy.bash"]'     --timeout-seconds 600 --region us-east-2
 
           - name: Create ssh key
-            run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key
+            run: ssh-keygen -t rsa -b 2048 -f ~/.ssh/my-ec2-key -c ubuntu
 
 
           - name: Checking ssh keys
