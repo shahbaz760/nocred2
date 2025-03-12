@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the SNS topic ARN
-SNS_TOPIC_ARN="arn:aws:sns:us-east-2:637527414831:CodeDeploymentNotifications"
+SNS_TOPIC_ARN="arn:aws:sns:us-east-2:637527414831:test"
 
 # Function to send SNS email notification
 send_sns_notification() {
