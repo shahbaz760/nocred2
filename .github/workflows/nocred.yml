@@ -12,29 +12,29 @@ jobs:
       
       steps:
           - name: Checkout code
-            uses: actions/checkout@v2
-            
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v2
+            uses: actions/checkout@v4
 
           - name: Set up AWS credentials via OIDC
             id: aws-oidc
             uses: aws-actions/configure-aws-credentials@v1
             with:
-              role-to-assume: arn:aws:iam::<AWS_ACCOUNT_ID>:role/nocred 
-              aws-region: us-east-1 
+              role-to-assume: arn:aws:iam::637527414831:role/github-actions
+              aws-region: us-east-2
 
           
           - name: Retrieve secret from AWS Secrets Manager
             run: |
-                SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id my-secret-id --query SecretString --output text)
-                echo "My secret is: $SECRET_VALUE"
-
-
-          - name: image push
+                SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-east-2:637527414831:secret:env-7cExoX | jq -r '.SecretString | fromjson | .env')
+                echo $SECRET_VALUE > .env
+                cat .env
+    
+          - name: Create Docker Image
             run: |
-                  aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
                   docker build -t nocred .
                   docker tag nocred:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
-                  docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
-                  '
+
+          - name: Login to amazon ECR 
+            run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
+
+          - name: Push Docker image to ECR
+            run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
