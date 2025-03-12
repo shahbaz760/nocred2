@@ -25,7 +25,7 @@ jobs:
               role-to-assume: arn:aws:iam::637527414831:role/github-actions # Replace with your IAM Role ARN
               aws-region: us-east-1 
 
-          - name: Aws CLI test
-            run: aws sts get-caller-identity
+          - name: Get env from aws secret manager
+            run: aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-east-2:637527414831:secret:env-7cExoX | jq -r '.SecretString | fromjson | .env'
 
     
