@@ -35,34 +35,32 @@ else
 fi
 
 # Login to ECR
-aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
+aws ecr get-login-password --region us-east-2 | sudo docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
 
 # Pull the latest docker image
-docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+sudo docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
 
-# Check which Docker container is running on port 80
-CONTAINER_ID=$(docker ps --filter "publish=80" --format "{{.ID}}")
+# Check if a Docker container is running on port 80
+CONTAINER_ID=$(sudo docker ps --filter "publish=80" --format "{{.ID}}")
 
 if [ -z "$CONTAINER_ID" ]; then
-    echo "No Docker container is running on port 80."
-    send_sns_notification "Deployment Failed" "No container is running on port 80."
-    exit 1
+    echo "No Docker container is running on port 80. Moving forward..."
+else
+    # Get the container name for better identification
+    CONTAINER_NAME=$(sudo docker ps --filter "publish=80" --format "{{.Names}}")
+
+    echo "Docker container $CONTAINER_NAME (ID: $CONTAINER_ID) is running on port 80."
+
+    # Stop the Docker container
+    echo "Stopping Docker container $CONTAINER_NAME..."
+    sudo docker stop $CONTAINER_ID
+
+    # Optionally, remove the container
+    echo "Removing Docker container $CONTAINER_NAME..."
+    sudo docker rm $CONTAINER_ID
+
+    echo "Docker container $CONTAINER_NAME has been stopped and removed."
 fi
-
-# Get the container name for better identification
-CONTAINER_NAME=$(docker ps --filter "publish=80" --format "{{.Names}}")
-
-echo "Docker container $CONTAINER_NAME (ID: $CONTAINER_ID) is running on port 80."
-
-# Stop the Docker container
-echo "Stopping Docker container $CONTAINER_NAME..."
-docker stop $CONTAINER_ID
-
-# Optionally, remove the container
-echo "Removing Docker container $CONTAINER_NAME..."
-docker rm $CONTAINER_ID
-
-echo "Docker container $CONTAINER_NAME has been stopped and removed."
 
 # Create a unique container name
 UNIQUE_ID=$(date +%s)
@@ -78,4 +76,3 @@ sudo docker system prune -a --force
 
 # Send success notification
 send_sns_notification "Deployment Success" "Code deployed successfully. The new container $CONTAINER_NAME is now running."
-
