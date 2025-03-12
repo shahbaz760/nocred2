@@ -23,7 +23,7 @@ jobs:
               ROLE: ${{ secrets.ROLE }}
             uses: aws-actions/configure-aws-credentials@v1
             with:
-              role-to-assume: $ROLE
+              role-to-assume: $"ROLE"
               aws-region: us-east-2
 
           
