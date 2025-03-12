@@ -53,4 +53,4 @@ jobs:
             run: aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo aws s3 cp s3://ssm-script-1/deploy.bash /tmp/deploy.bash && chmod 777 /tmp/deploy.bash"]'     --timeout-seconds 600 --region us-east-2
 
           - name: Deploy code
-            run: aws ssm send-command   --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo bash /tmp/deploy.bash"]'     --timeout-seconds 600 --region us-east-2
+            run: aws ssm send-command   --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["bash /tmp/deploy.bash"]'     --timeout-seconds 600 --region us-east-2
