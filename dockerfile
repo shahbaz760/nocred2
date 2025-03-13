@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the Angular app in production mode
-RUN npm run build --prod
+RUN npm cache clean --force && npm install
 
 # Step 2: Serve the app using NGINX
 FROM nginx:alpine AS production-stage
