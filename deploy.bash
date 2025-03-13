@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the SNS topic ARN
-SNS_TOPIC_ARN="arn:aws:sns:us-east-2:637527414831:test"
+SNS_TOPIC_ARN="arn:aws:sns:us-east-2:637527414831:nocred2"
 
 # Function to send SNS email notification
 send_sns_notification() {
@@ -38,7 +38,7 @@ fi
 aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
 
 # Pull the latest docker image
-sudo docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
+sudo docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
 # Check if a Docker container is running on port 80
 CONTAINER_ID=$(sudo docker ps --filter "publish=80" --format "{{.ID}}")
@@ -68,7 +68,7 @@ CONTAINER_NAME="frontend-${UNIQUE_ID}"
 
 # Start a new container
 echo "Starting a new container with name $CONTAINER_NAME..."
-sudo docker run -d --name $CONTAINER_NAME --restart always -p 80:80 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+sudo docker run -d --name $CONTAINER_NAME --restart always -p 80:80 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
 # Clean up unused Docker resources
 echo "Cleaning up unused Docker resources..."
