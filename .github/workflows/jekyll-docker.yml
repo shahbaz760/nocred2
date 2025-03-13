@@ -43,4 +43,4 @@ jobs:
             run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
 
-    ?
+    
