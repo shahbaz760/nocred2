@@ -15,7 +15,7 @@ RUN npm install --legacy-peer-deps
 
 RUN npm run build
 # Step 2: Serve the app using NGINX
-FROM nginx:alpine AS production-stage
+FROM nginx:alpine
 
 # Copy the build output from the build-stage
 COPY --from=build-stage /dist/FirstProject /usr/share/nginx/html
