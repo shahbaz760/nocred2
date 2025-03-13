@@ -35,10 +35,10 @@ else
 fi
 
 # Login to ECR
-aws ecr get-login-password --region us-east-2 | sudo docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
 
 # Pull the latest docker image
-sudo docker pull 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+sudo docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
 # Check if a Docker container is running on port 80
 CONTAINER_ID=$(sudo docker ps --filter "publish=80" --format "{{.ID}}")
