@@ -34,13 +34,13 @@ jobs:
           - name: Create Docker Image
             run: |
                   docker build -t nocred .
-                  docker tag nocred:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+                  docker tag nocred2:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
           - name: Login to amazon ECR 
             run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 637527414831.dkr.ecr.us-east-2.amazonaws.com
 
           - name: Push Docker image to ECR
-            run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred:latest
+            run: docker push 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
 
           - name: Clean up old script
