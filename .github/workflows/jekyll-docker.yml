@@ -44,7 +44,7 @@ jobs:
 
 
           - name: Clean up old script
-            run: aws ssm send-command     --instance-ids "i-0d0ab4ce9a8f6cfb7"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo rm -rf /tmp/deploy.bash"]'     --timeout-seconds 600 --region us-east-2
+            run: aws ssm send-command     --instance-ids "i-05c2fb979fca7ffc2"     --document-name "AWS-RunShellScript"     --parameters 'commands=["sudo rm -rf /tmp/deploy.bash"]'     --timeout-seconds 600 --region us-east-2
 
           - name: Copy public to S3
             run: aws s3 cp deploy.bash s3://ssm-script-1/deploy.bash
