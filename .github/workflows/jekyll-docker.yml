@@ -33,7 +33,7 @@ jobs:
     # 
           - name: Create Docker Image
             run: |
-                  docker build -t nocred .
+                  docker build -t nocred2 .
                   docker tag nocred2:latest 637527414831.dkr.ecr.us-east-2.amazonaws.com/nocred2:latest
 
           - name: Login to amazon ECR 
