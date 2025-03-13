@@ -18,7 +18,7 @@ RUN npm run build
 FROM nginx:alpine AS production-stage
 
 # Copy the build output from the build-stage
-COPY --from=build-stage /app/dist/first-project /usr/share/nginx/html
+COPY --from=build-stage /dist/first-project /usr/share/nginx/html
 
 # Expose port 80 to be accessible from the host
 EXPOSE 80
